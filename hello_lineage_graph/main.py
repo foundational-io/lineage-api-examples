@@ -2,11 +2,9 @@ from foundational_api_wrapper import FoundationalAPIClient
 
 # Constants
 ENTITY_TYPE = "TABLE"  # Example entity type
-ENTITY_NAME = "stg_customers"
-#API_KEY_ID = "your_api_key_id"
-API_KEY_ID = "0a36d191-fb98-480a-a59b-1caf749192ef"
-# API_KEY_SECRET = "your_api_key_secret"
-API_KEY_SECRET = "5ac0e25f-cc2c-47e6-b833-64747c627a09"
+ENTITY_NAME = "table_name_to_search_for"
+API_KEY_ID = "your_api_key_id"
+API_KEY_SECRET = "your_api_key_secret"
 
 def main():
     # Initialize the API wrapper
