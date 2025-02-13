@@ -63,7 +63,7 @@ class FoundationalAPIClient:
         response.raise_for_status()
         return cast(dict[str, Any], response.json())
 
-    def get_entity_and_dependencies(
+    def get_entity_details(
             self,
             entity_id: str,
     ) -> dict[str, Any]:

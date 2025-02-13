@@ -1,4 +1,4 @@
-from .foundational_api_wrapper import FoundationalAPIClient
+from foundational_api_wrapper import FoundationalAPIClient
 
 # Constants
 ENTITY_TYPE = "TABLE"  # Example entity type
@@ -19,11 +19,6 @@ def main():
         return
 
     entity_id = search_results['entities'][0]['id']  # Get the ID of the first matching entity
-
-    # Get entity and dependencies
-    entity_data = api_client.get_entity_and_dependencies(entity_id)
-    print("Entity and Dependencies:")
-    print(entity_data)
 
     # Get downstream dependencies
     downstreams = api_client.get_downstream_dependencies(entity_id)
