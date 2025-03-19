@@ -23,10 +23,27 @@ def main():
     print("\nDownstream Dependencies:")
     print(downstreams)
 
+    page_token = downstreams.get('pageToken', None)
+    while page_token is not None:
+        downstreams = api_client.get_downstream_dependencies(entity_id, page_token=page_token)
+        print("\nMore Downstream Dependencies:")
+        print(downstreams)
+
+        page_token = downstreams.get('pageToken', None)
+
     # Get upstream dependencies
     upstreams = api_client.get_upstream_dependencies(entity_id)
     print("\nUpstream Dependencies:")
     print(upstreams)
+
+    page_token = upstreams.get('pageToken', None)
+    while page_token is not None:
+        upstreams = api_client.get_upstream_dependencies(entity_id, page_token=page_token)
+        print("\nMore Upstream Dependencies:")
+        print(upstreams)
+
+        page_token = upstreams.get('pageToken', None)
+
 
 if __name__ == "__main__":
     main()
