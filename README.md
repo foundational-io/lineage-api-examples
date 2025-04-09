@@ -46,6 +46,41 @@ You can run the example in two ways: directly on your machine or within Docker.
    docker run --rm lineage-api-example
    ```
 
+### Option 3: Use MCP Server
+This repository includes an MCP server implementation that provides convenient access to the Foundational API. To use it:
+
+1. Install the MCP package:
+   ```sh
+   pip install mcp
+   ```
+
+2. Test that the server is running correctly by executing:
+   ```sh
+   mcp run /path/to/lineage-api-examples/mcp/foundational_mcp_server.py
+   ```
+
+3. Configure the MCP server in your AI assistant settings (e.g., Claude). Add the following configuration, replacing the paths and API credentials with your own:
+   ```json
+   {
+     "mcpServers": {
+       "FoundationalRamp": {
+         "command": "/path/to/your/python/mcp",
+         "args": [
+           "run",
+           "/path/to/lineage-api-examples/mcp/foundational_mcp_server.py"
+         ],
+         "env": {
+           "FOUNDATIONAL_API_KEY": "your-api-key",
+           "FOUNDATIONAL_API_SECRET": "your-api-secret"
+         }
+       }
+     },
+     "globalShortcut": ""
+   }
+   ```
+
+The MCP server provides tools for searching entities, getting entity details, and exploring upstream/downstream dependencies through your AI assistant.
+
 ## Additional Resources
 - Learn more about the API: [Getting Started with the Lineage API](https://docs.foundational.io/en/articles/10067204-getting-started-with-the-lineage-api)
 - Explore the OpenAPI documentation: [API Reference](https://api.foundational.io/api/v1/docs)
