@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, Union
 
 # Add to sys path the hello_lineage_graph directory
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -45,7 +45,7 @@ def search(
     parent_name: Optional[str] = None,
     database: Optional[str] = None,
     db_schema: Optional[str] = None,
-    platform: Optional[str] = None,
+    platform: Optional[Union[str, List[str]]] = None,
     project_name: Optional[str] = None,
     full_matches_only: bool = False,
     limit: Optional[int] = None,
@@ -85,7 +85,7 @@ def get_downstream_dependencies(
     parent_name: Optional[str] = None,
     database: Optional[str] = None,
     db_schema: Optional[str] = None,
-    platform: Optional[str] = None,
+    platform: Optional[Union[str, List[str]]] = None,
     project_name: Optional[str] = None,
     full_matches_only: bool = False,
     max_depth: Optional[int] = None,
@@ -118,7 +118,7 @@ def get_upstream_dependencies(
     parent_name: Optional[str] = None,
     database: Optional[str] = None,
     db_schema: Optional[str] = None,
-    platform: Optional[str] = None,
+    platform: Optional[Union[str, List[str]]] = None,
     project_name: Optional[str] = None,
     full_matches_only: bool = False,
     max_depth: Optional[int] = None,
