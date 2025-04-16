@@ -5,13 +5,14 @@ ENTITY_TYPE = "TABLE"  # Example entity type
 ENTITY_NAME = "table_name_to_search_for"
 API_KEY_ID = "your_api_key_id"
 API_KEY_SECRET = "your_api_key_secret"
+SEARCH_PLATFORMS = ["POSTGRES", "SNOWFLAKE"]
 
 def main():
     # Initialize the API wrapper
     api_client = FoundationalAPIClient(API_KEY_ID, API_KEY_SECRET)
 
     # Search for the entity
-    search_results = api_client.search(entity_type=ENTITY_TYPE, name=ENTITY_NAME)
+    search_results = api_client.search(entity_type=ENTITY_TYPE, name=ENTITY_NAME, platform=SEARCH_PLATFORMS)
     if not search_results.get('entities'):
         print(f"Entity '{ENTITY_NAME}' not found.")
         return
