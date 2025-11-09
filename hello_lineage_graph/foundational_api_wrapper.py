@@ -1,9 +1,15 @@
+from enum import Enum
 from uuid import uuid4
 from base64 import b64encode
 from typing import Any, Literal, cast
 from functools import cached_property
 
 import requests
+
+
+class APICertification(str, Enum):
+    Certified = "certified"
+    Deprecated = "deprecated"
 
 
 class FoundationalAPIError(Exception):
@@ -42,6 +48,7 @@ class FoundationalAPIClient:
             db_schema: str | None = None,
             platform: str | list[str] | None = None,
             project_name: str | None = None,
+            certification: APICertification | None = None,
             full_matches_only: bool = False,
             limit: int | None = None,
             page_token: str | None = None,
@@ -54,6 +61,7 @@ class FoundationalAPIClient:
             db_schema=db_schema,
             platform=platform,
             project_name=project_name,
+            certification=certification,
             full_matches_only=full_matches_only,
             limit=limit,
             page_token=page_token,
