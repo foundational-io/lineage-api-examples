@@ -79,6 +79,24 @@ def get_entity_details(entity_id: str) -> Dict[str, Any]:
     return client.get_entity_details(entity_id)
 
 @mcp.tool()
+def get_pr_lineage_diff(repo_name: str, pr_number: int) -> Dict[str, Any]:
+    """
+    Get lineage diff metadata for a pull request.
+    """
+    if client is None:
+        raise RuntimeError("API client not initialized")
+    return client.get_pr_lineage_diff(repo_name=repo_name, pr_number=pr_number)
+
+@mcp.tool()
+def get_pr_lineage_issues(repo_name: str, pr_number: int) -> Dict[str, Any]:
+    """
+    Get lineage issues for a pull request.
+    """
+    if client is None:
+        raise RuntimeError("API client not initialized")
+    return client.get_pr_lineage_issues(repo_name=repo_name, pr_number=pr_number)
+
+@mcp.tool()
 def get_downstream_dependencies(
     entity_id: str,
     name: Optional[str] = None,
