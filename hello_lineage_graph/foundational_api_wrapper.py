@@ -81,6 +81,32 @@ class FoundationalAPIClient:
         response.raise_for_status()
         return cast(dict[str, Any], response.json())
 
+    def get_pr_lineage_diff(
+            self,
+            repo_name: str,
+            pr_number: int,
+    ) -> dict[str, Any]:
+        params = dict(
+            repo_name=repo_name,
+            pr_number=pr_number,
+        )
+        response = self.get("lineage/pr/issues/diff", params=params)
+        response.raise_for_status()
+        return cast(dict[str, Any], response.json())
+
+    def get_pr_lineage_issues(
+            self,
+            repo_name: str,
+            pr_number: int,
+    ) -> dict[str, Any]:
+        params = dict(
+            repo_name=repo_name,
+            pr_number=pr_number,
+        )
+        response = self.get("lineage/pr/issues", params=params)
+        response.raise_for_status()
+        return cast(dict[str, Any], response.json())
+
     def get_downstream_dependencies(
             self,
             entity_id: str,

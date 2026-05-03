@@ -79,7 +79,19 @@ This repository includes an MCP server implementation that provides convenient a
    }
    ```
 
-The MCP server provides tools for searching entities, getting entity details, and exploring upstream/downstream dependencies through your AI assistant.
+The MCP server provides tools for:
+- searching entities
+- getting entity details
+- exploring upstream/downstream dependencies
+- retrieving pull request lineage diff metadata
+- retrieving pull request lineage issues
+
+### Supported API Endpoints in This Repository
+- `GET /lineage/search`
+- `GET /lineage/entity/{entity_id}`
+- `GET /lineage/entity/{entity_id}/{direction}`
+- `GET /lineage/pr/issues/diff`
+- `GET /lineage/pr/issues`
 
 ## Additional Resources
 - Learn more about the API: [Getting Started with the Lineage API](https://docs.foundational.io/en/articles/10067204-getting-started-with-the-lineage-api)
