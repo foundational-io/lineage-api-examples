@@ -15,8 +15,16 @@ cd lineage-api-examples
 Before running the examples, you need an API token. Follow the instructions here to generate your API key:
 [Creating an API Token](https://docs.foundational.io/en/articles/9920307-creating-api-token)
 
+### Repository Layout
+- `foundational_api/` — the shared `FoundationalAPIClient` wrapper used by every example.
+- `lineage_example.py` — lineage search + upstream/downstream dependencies example.
+- `onboarding_example.py` — onboarding / offboarding API example.
+- `foundational_mcp_server.py` — an MCP server exposing the lineage tools.
+
+Run the example scripts from the repository root so `from foundational_api import FoundationalAPIClient` resolves.
+
 ### Configure Your API Credentials
-Update the following variables in the `main.py` file under `hello_lineage_graph` folder:
+Update the following variables at the top of `lineage_example.py`:
 ```python
 ENTITY_NAME = "table_name_to_search_for"
 API_KEY_ID = "your_api_key_id"
@@ -33,7 +41,7 @@ You can run the example in two ways: directly on your machine or within Docker.
    ```
 2. Run the example script:
    ```sh
-   python hello_lineage_graph/main.py
+   python lineage_example.py
    ```
 
 ### Option 2: Run Within Docker
@@ -46,6 +54,25 @@ You can run the example in two ways: directly on your machine or within Docker.
    docker run --rm lineage-api-example
    ```
 
+### Onboarding / Offboarding Example
+`onboarding_example.py` shows how to use the onboarding API to list, onboard, and offboard repositories, and to manage the PowerBI workspaces scanned by your organization's PowerBI connector. It reuses the same `FoundationalAPIClient` wrapper from `foundational_api`.
+
+> **Note:** The onboarding API must be enabled for your organization. If it is not, these endpoints return HTTP 403 — contact [support@foundational.io](mailto:support@foundational.io) to enable it.
+
+1. Set your credentials (and, optionally, `REPO_NAME` / `POWERBI_WORKSPACE_ID`) at the top of `onboarding_example.py`:
+   ```python
+   API_KEY_ID = "your_api_key_id"
+   API_KEY_SECRET = "your_api_key_secret"
+   REPO_NAME = "my-org/my-repo"
+   POWERBI_WORKSPACE_ID = "11111111-2222-3333-4444-555555555555"
+   ```
+2. Run the example:
+   ```sh
+   python onboarding_example.py
+   ```
+
+By default `main()` only performs **read-only** calls (listing repositories and PowerBI workspaces) so it is safe to run as-is. The mutating operations — triggering onboarding, offboarding a repository, and adding/removing PowerBI workspaces — are provided as separate functions that are commented out in `main()`; uncomment them deliberately after setting the relevant constants.
+
 ### Option 3: Use MCP Server
 This repository includes an MCP server implementation that provides convenient access to the Foundational API. To use it:
 
@@ -56,7 +83,7 @@ This repository includes an MCP server implementation that provides convenient a
 
 2. Test that the server is running correctly by executing:
    ```sh
-   mcp run /path/to/lineage-api-examples/mcp/foundational_mcp_server.py
+   mcp run /path/to/lineage-api-examples/foundational_mcp_server.py
    ```
 
 3. Configure the MCP server in your AI assistant settings (e.g., Claude). Add the following configuration, replacing the paths and API credentials with your own:
@@ -67,7 +94,7 @@ This repository includes an MCP server implementation that provides convenient a
          "command": "/path/to/your/python/mcp",
          "args": [
            "run",
-           "/path/to/lineage-api-examples/mcp/foundational_mcp_server.py"
+           "/path/to/lineage-api-examples/foundational_mcp_server.py"
          ],
          "env": {
            "FOUNDATIONAL_API_KEY": "your-api-key",
@@ -87,11 +114,21 @@ The MCP server provides tools for:
 - retrieving pull request lineage issues
 
 ### Supported API Endpoints in This Repository
+
+Lineage:
 - `GET /lineage/search`
 - `GET /lineage/entity/{entity_id}`
 - `GET /lineage/entity/{entity_id}/{direction}`
 - `GET /lineage/pr/issues/diff`
 - `GET /lineage/pr/issues`
+
+Onboarding / Offboarding:
+- `GET /onboarding/repos`
+- `POST /onboarding/repos/{repo_name}/trigger`
+- `DELETE /onboarding/repos/{repo_name}`
+- `GET /onboarding/powerbi/workspaces`
+- `POST /onboarding/powerbi/workspaces`
+- `DELETE /onboarding/powerbi/workspaces/{workspace_id}`
 
 ## Additional Resources
 - Learn more about the API: [Getting Started with the Lineage API](https://docs.foundational.io/en/articles/10067204-getting-started-with-the-lineage-api)
