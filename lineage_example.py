@@ -1,4 +1,4 @@
-from foundational_api_wrapper import FoundationalAPIClient
+from foundational_api import FoundationalAPIClient
 
 # Constants
 ENTITY_TYPE = "TABLE"  # Example entity type

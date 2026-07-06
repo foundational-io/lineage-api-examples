@@ -39,6 +39,16 @@ class FoundationalAPIClient:
         url = f"{self._base_url}/api/{self.API_VERSION}/{path}"
         return self.session.get(url, headers=headers, **kwargs)
 
+    def post(self, path: str, **kwargs: Any) -> requests.Response:
+        headers = self._generate_request_headers()
+        url = f"{self._base_url}/api/{self.API_VERSION}/{path}"
+        return self.session.post(url, headers=headers, **kwargs)
+
+    def delete(self, path: str, **kwargs: Any) -> requests.Response:
+        headers = self._generate_request_headers()
+        url = f"{self._base_url}/api/{self.API_VERSION}/{path}"
+        return self.session.delete(url, headers=headers, **kwargs)
+
     def search(
             self,
             entity_type: Literal["TABLE", "COLUMN", "DASHBOARD", "DASHBOARD_COLUMN"],
@@ -195,6 +205,76 @@ class FoundationalAPIClient:
         )
         params = {k: v for k, v in params.items() if v is not None}
         response = self.get(f"lineage/entity/{entity_id}/{direction}", params=params)
+        response.raise_for_status()
+        return cast(dict[str, Any], response.json())
+
+    # ------------------------------------------------------------------
+    # Onboarding / offboarding API (/api/v1/onboarding/...)
+    #
+    # The onboarding API must be enabled for your organization; when it is not,
+    # these endpoints respond with HTTP 403. Contact Foundational support to
+    # enable it.
+    # ------------------------------------------------------------------
+
+    def list_repos(self) -> dict[str, Any]:
+        """List the organization's repositories.
+
+        Includes offboarded repositories. Returns ``{"repos": ["org/repo", ...]}``.
+        """
+        response = self.get("onboarding/repos")
+        response.raise_for_status()
+        return cast(dict[str, Any], response.json())
+
+    def trigger_repo_onboarding(self, repo_name: str) -> None:
+        """Trigger (re-)onboarding for a repository.
+
+        ``repo_name`` is the repository full name, for example ``org/repository``.
+        If the repo was previously offboarded this brings it back before scanning.
+        Responds with HTTP 204 (no body); raises on 404 if the repo is not in the
+        caller's organization.
+        """
+        response = self.post(f"onboarding/repos/{repo_name}/trigger")
+        response.raise_for_status()
+
+    def offboard_repo(self, repo_name: str) -> None:
+        """Offboard a repository and its connectors.
+
+        ``repo_name`` is the repository full name, for example ``org/repository``.
+        Scan history is preserved and :meth:`trigger_repo_onboarding` brings the
+        repo back. Responds with HTTP 204 (no body); raises on 404 if the repo is
+        not in the caller's organization.
+        """
+        response = self.delete(f"onboarding/repos/{repo_name}")
+        response.raise_for_status()
+
+    def list_powerbi_workspaces(self) -> dict[str, Any]:
+        """List the workspace ids configured on the org's PowerBI connector.
+
+        Returns ``{"workspaceIds": ["<guid>", ...]}``. Raises on 404 if the org
+        has no PowerBI connector, or 409 if more than one is configured.
+        """
+        response = self.get("onboarding/powerbi/workspaces")
+        response.raise_for_status()
+        return cast(dict[str, Any], response.json())
+
+    def add_powerbi_workspace(self, workspace_id: str) -> dict[str, Any]:
+        """Add a workspace id (a GUID) to the org's PowerBI connector.
+
+        Idempotent: a no-op if the workspace is already configured. Returns the
+        updated ``{"workspaceIds": [...]}`` list.
+        """
+        response = self.post("onboarding/powerbi/workspaces", json={"workspaceId": workspace_id})
+        response.raise_for_status()
+        return cast(dict[str, Any], response.json())
+
+    def remove_powerbi_workspace(self, workspace_id: str) -> dict[str, Any]:
+        """Remove a workspace id (a GUID) from the org's PowerBI connector.
+
+        Idempotent: a no-op (not a 404) if the id is absent. Removing the last id
+        resets the connector to autodiscovering all authorized workspaces. Returns
+        the updated ``{"workspaceIds": [...]}`` list.
+        """
+        response = self.delete(f"onboarding/powerbi/workspaces/{workspace_id}")
         response.raise_for_status()
         return cast(dict[str, Any], response.json())
 

@@ -1,21 +1,17 @@
 import unittest
 from unittest.mock import patch
 from io import StringIO
-import sys
-import os
 
-TESTS_PATH = os.getcwd()
-SAMPLES_PATH = os.path.join(TESTS_PATH, '..', 'hello_lineage_graph')
-sys.path.append(SAMPLES_PATH)
+from lineage_example import main
 
-from hello_lineage_graph.main import main  # Adjust import based on your actual structure
 
-class TestMain(unittest.TestCase):  # Use 'class' and 'unittest.TestCase'
+class TestMain(unittest.TestCase):
 
     @patch('sys.stdout', new_callable=StringIO)
-    def test_main(self, mock_stdout):  # Use 'self' and 'mock_stdout'
-        # Call the main function, and just verifies it doesn't crash :)
+    def test_main(self, mock_stdout):
+        # Call the main function, and just verify it doesn't crash :)
         main()
+
 
 if __name__ == '__main__':
     unittest.main()

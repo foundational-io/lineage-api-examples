@@ -2,10 +2,11 @@ import os
 import sys
 from typing import Any, Dict, List, Literal, Optional, Union
 
-# Add to sys path the hello_lineage_graph directory
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# `mcp run <path>` loads this file by path and does not add its directory to
+# sys.path, so add the repo root here to make the import resolve from any cwd.
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from hello_lineage_graph.foundational_api_wrapper import FoundationalAPIClient
+from foundational_api import FoundationalAPIClient
 from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("Foundational Data MCP")
