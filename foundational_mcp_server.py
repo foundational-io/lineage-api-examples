@@ -2,6 +2,10 @@ import os
 import sys
 from typing import Any, Dict, List, Literal, Optional, Union
 
+# `mcp run <path>` loads this file by path and does not add its directory to
+# sys.path, so add the repo root here to make the import resolve from any cwd.
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from foundational_api import FoundationalAPIClient
 from mcp.server.fastmcp import FastMCP
 
